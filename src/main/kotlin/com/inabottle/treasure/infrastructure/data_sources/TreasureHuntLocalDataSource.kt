@@ -1,26 +1,30 @@
 package com.inabottle.treasure.infrastructure.data_sources
 
-import com.inabottle.treasure.infrastructure.entities.TreasureHuntEntity
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository
-import java.util.*
+import com.inabottle.treasure.infrastructure.repositories.TreasureHuntEntity
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
-//TODO
-interface TreasureHuntLocalDataSource{
-    fun save(entity : TreasureHuntEntity)
 
-    fun loadAll()
+interface TreasureHuntLocalDataSource {
+    fun save(entity : TreasureHuntEntity) :  Mono<TreasureHuntEntity>
+
+    fun loadAll() : Flux<TreasureHuntEntity>
 }
 
-interface TrasureHuntMongoDataSource:  TreasureHuntLocalDataSource{
 
-    override fun save(entity: TreasureHuntEntity) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+@Component
+class TreasureHuntLocalDataSourceImp(private val treasureHuntMongoDataSource : TreasureHuntMongoDataRepository) :  TreasureHuntLocalDataSource {
 
-    override fun loadAll() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun save(entity: TreasureHuntEntity) :  Mono<TreasureHuntEntity> {
+        println("chegouc")
+        val ret =treasureHuntMongoDataSource.save(entity)
+        ret.map {println( it.id )}
+    return ret}
+
+    override fun loadAll() : Flux<TreasureHuntEntity> {
+        val t= treasureHuntMongoDataSource.findAll()
+        return t
     }
 
 }
-
-interface  teste : ReactiveMongoRepository<TreasureHuntEntity, UUID>

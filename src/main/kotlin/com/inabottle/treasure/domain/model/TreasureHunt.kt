@@ -1,20 +1,23 @@
 package com.inabottle.treasure.domain.model
 
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
  data class TreasureHunt(
-        val id: UUID,
-        val steps: List<Step>,
-        val password: LockedFeature?,
-        val tipToFirstStep : String,
-        val commonRewards : List<UUID>,
-        val especificRewards : List<ConfigReward>,
-        val maxWinners : Int?,
-        val startDate : Date,
-        val endDate : Date,
-        val userCreateId : UUID,
-        val amountOfPoints : BigDecimal ?
+         val id: UUID,
+         val steps: List<Step>,
+         val password: LockedFeature?,
+         val tipToFirstStep : String,
+         val commonRewards : List<UUID>,
+         val especificRewards : List<ConfigReward>,
+         val maxWinners : Int?,
+         val startDate : LocalDateTime,
+         val endDate : LocalDateTime,
+         val userCreateId : UUID,
+         val amountOfPoints : BigDecimal ?,
+         var state : String = "processings"
 ){
 
     init{
@@ -22,7 +25,7 @@ import java.util.*
             "Steps are required, can't be empty"
         }
 
-        require(startDate.before(endDate)){
+        require(startDate.isBefore(endDate)){
             "Start date must be before end date"
         }
 

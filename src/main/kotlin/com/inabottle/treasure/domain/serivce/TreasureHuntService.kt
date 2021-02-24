@@ -7,14 +7,20 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 
-@Service
-class TreasureHuntService(private val treasureHuntRepository: TreasureHuntRepository){
+interface TreasureHuntService{
+    fun save(model : TreasureHunt) : Mono<TreasureHunt>
 
-    fun save(model : TreasureHunt) : Mono<TreasureHunt>{
+    fun loadAll() : Flux<TreasureHunt>
+}
+
+@Service
+class TreasureHuntServiceImp(private val treasureHuntRepository: TreasureHuntRepository) : TreasureHuntService{
+
+    override fun save(model : TreasureHunt) : Mono<TreasureHunt> {
         return treasureHuntRepository.save(model)
     }
 
-    fun loadAll() : Flux<TreasureHunt>{
+    override fun loadAll() : Flux<TreasureHunt> {
         return treasureHuntRepository.loadAll()
     }
 

@@ -1,17 +1,19 @@
 package com.inabottle.treasure.infrastructure.data_sources
 
-import com.inabottle.treasure.domain.model.TreasureHunt
 import com.inabottle.treasure.infrastructure.adapters.EventProducer
+import com.inabottle.treasure.infrastructure.repositories.TreasureHuntEntity
+import org.springframework.stereotype.Component
 
 
 interface TreasureHuntProducer{
-    fun treasureHuntSaved(model : TreasureHunt)
+    fun treasureHuntSaved(model : TreasureHuntEntity)
 }
 
+@Component
 class TreasureHuntProducerImp(private val producer: EventProducer) : TreasureHuntProducer{
 
-    override fun treasureHuntSaved(model: TreasureHunt) {
-        producer.send(EXCHANGE,   ROUTING_KEY ,  model)
+    override fun treasureHuntSaved(entity: TreasureHuntEntity){
+        producer.send(EXCHANGE,   ROUTING_KEY ,  entity)
     }
 
     companion object{
