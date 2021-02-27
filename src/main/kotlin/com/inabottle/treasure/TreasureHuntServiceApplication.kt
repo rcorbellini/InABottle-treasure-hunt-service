@@ -1,7 +1,6 @@
 package com.inabottle.treasure
 
-import com.inabottle.treasure.infrastructure.data_sources.TreasureHuntMongoDataRepository
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -11,6 +10,11 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import org.springframework.http.HttpStatus
+import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 
 
 @EnableEurekaClient
@@ -35,4 +39,3 @@ class TreasureHuntServiceApplication{
 fun main(args: Array<String>) {
 	runApplication<TreasureHuntServiceApplication>(*args)
 }
-

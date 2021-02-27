@@ -1,7 +1,7 @@
 package com.inabottle.treasure.domain.serivce
 
 import com.inabottle.treasure.domain.model.TreasureHunt
-import com.inabottle.treasure.domain.repositories.TreasureHuntRepository
+import com.inabottle.treasure.infrastructure.repositories.TreasureHuntRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -21,7 +21,7 @@ class TreasureHuntServiceImp(private val treasureHuntRepository: TreasureHuntRep
     }
 
     override fun loadAll() : Flux<TreasureHunt> {
-        return treasureHuntRepository.loadAll()
+        return treasureHuntRepository.findAll()
     }
 
 }

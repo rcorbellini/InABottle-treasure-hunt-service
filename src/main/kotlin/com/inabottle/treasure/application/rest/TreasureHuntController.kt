@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 
@@ -18,17 +19,17 @@ import java.util.*
 @RestController
 class TreasureHuntController(private val treasureHuntService: TreasureHuntService) {
 
-    @PostMapping("/treasure", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @PostMapping("/treasure", produces = [MediaType.TEXT_EVENT_STREAM_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    fun save(@RequestBody treasureHuntInsertRequest : TreasureHuntInsertRequest) : Mono<TreasureHuntInsertResponse>{
-        return treasureHuntService.save(treasureHuntInsertRequest.treasureHunt).map { TreasureHuntInsertResponse(id = it.id) }
+    fun save(@RequestBody treasureHuntInsertRequest : TreasureHunt) : Mono<TreasureHunt>{
+        return treasureHuntService.save(treasureHuntInsertRequest)
     }
 
     @GetMapping("/treasure", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun findAll() : Flux<TreasureHuntInsertResponse>{
-        return treasureHuntService.loadAll().map { TreasureHuntInsertResponse(it.id) }
+    fun stream() : Flux<TreasureHunt>{
+        return treasureHuntService.loadAll()
     }
-    fun x(){
+    fun mock(): TreasureHunt{
 
         var gson = Gson()
         val mock = TreasureHunt(
@@ -42,8 +43,8 @@ class TreasureHuntController(private val treasureHuntService: TreasureHuntServic
                         )
                 ),
                 commonRewards = listOf(UUID.randomUUID(),UUID.randomUUID()),
-                startDate = LocalDate.of(2020, 10,1).atTime(20,20),
-                endDate = LocalDate.of(2030, 6, 25).atTime(10,10),
+                startDate = Instant.now(),
+                endDate = Instant.now().plusMillis(10000),
                 maxWinners = 10,
                 password = LockedFeature(password = "jucap",tip="juca"),
                 userCreateId = UUID.randomUUID(),
@@ -52,25 +53,12 @@ class TreasureHuntController(private val treasureHuntService: TreasureHuntServic
                 especificRewards = listOf(ConfigReward(position = 1,  idsRewards=listOf(UUID.randomUUID())))
         )
 
-        var jsonString = gson.toJson(TreasureHuntInsertRequest(
-                treasureHunt =  mock))
-        treasureHuntService.save(mock)
+        var jsonString = gson.toJson(mock)
+
         println(jsonString)
-    }
-    @GetMapping("/test", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun go() : Flux<String>{
-        return Flux.interval(Duration.ofSeconds(0), Duration.ofSeconds(3)).map {
-            "teste"
-        }.take(3)
+        return mock
     }
 
 }
 
-
-data class TreasureHuntInsertRequest(
-        val treasureHunt : TreasureHunt
-)
-
-data class TreasureHuntInsertResponse(
-        val id: UUID
-)
+//{"id":"ae6737ab-18b7-49c5-bfa3-4f2ff0b533e8","steps":[{"id":"627912d9-d424-4ff4-889d-b11e23b78f3c","password":{"password":"xp","tip":"x"},"position":{"latitude":-50.0000,"longitude":50.0000},"tipToNextStep":"tip nex"}],"password":{"password":"jucap","tip":"juca"},"tipToFirstStep":"vai juca","commonRewards":["23e40cfc-c7c5-4762-a32e-3bac799cc915","0668a412-3a43-404e-a1a4-f995194ff7ba"],"especificRewards":[{"position":1,"idsRewards":["3bbfe64c-da1b-4610-bd6b-ff3fb6cc11af"]}],"maxWinners":10,"startDate":"2021-02-26T02:25:42.578Z","endDate":"2021-02-26T02:25:52.578Z","userCreateId":"4650e2c7-56b3-4181-b6c8-3ca77ce00c89","amountOfPoints":null,"state":"processings"}

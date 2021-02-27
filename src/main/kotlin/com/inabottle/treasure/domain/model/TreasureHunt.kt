@@ -1,6 +1,7 @@
 package com.inabottle.treasure.domain.model
 
 import java.math.BigDecimal
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -13,8 +14,8 @@ import java.util.*
          val commonRewards : List<UUID>,
          val especificRewards : List<ConfigReward>,
          val maxWinners : Int?,
-         val startDate : LocalDateTime,
-         val endDate : LocalDateTime,
+         val startDate : Instant,
+         val endDate : Instant,
          val userCreateId : UUID,
          val amountOfPoints : BigDecimal ?,
          var state : String = "processings"
