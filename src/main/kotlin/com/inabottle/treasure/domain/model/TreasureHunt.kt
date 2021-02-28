@@ -8,6 +8,7 @@ import java.util.*
 
  data class TreasureHunt(
          val id: UUID,
+         val startPoint : Position,
          val steps: List<Step>,
          val password: LockedFeature?,
          val tipToFirstStep : String,

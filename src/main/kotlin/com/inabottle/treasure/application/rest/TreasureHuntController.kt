@@ -42,6 +42,7 @@ class TreasureHuntController(private val treasureHuntService: TreasureHuntServic
                                 "tip nex"
                         )
                 ),
+                startPoint = Position(-50.000, 50.000),
                 commonRewards = listOf(UUID.randomUUID(),UUID.randomUUID()),
                 startDate = Instant.now(),
                 endDate = Instant.now().plusMillis(10000),
