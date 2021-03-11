@@ -3,16 +3,13 @@ package com.inabottle.treasure.application.rest
 import com.google.gson.Gson
 import com.inabottle.treasure.domain.model.*
 import com.inabottle.treasure.domain.serivce.TreasureHuntService
-import kotlinx.coroutines.delay
-import org.springframework.boot.json.GsonJsonParser
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.time.Duration
+import java.math.BigDecimal
 import java.time.Instant
-import java.time.LocalDate
 import java.util.*
 
 
@@ -22,7 +19,7 @@ class TreasureHuntController(private val treasureHuntService: TreasureHuntServic
     @PostMapping("/treasure", produces = [MediaType.TEXT_EVENT_STREAM_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun save(@RequestBody treasureHuntInsertRequest : TreasureHunt) : Mono<TreasureHunt>{
-        return treasureHuntService.save(treasureHuntInsertRequest)
+        return treasureHuntService.save(mock())
     }
 
     @GetMapping("/treasure", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -34,9 +31,12 @@ class TreasureHuntController(private val treasureHuntService: TreasureHuntServic
         var gson = Gson()
         val mock = TreasureHunt(
                 id = UUID.randomUUID(),
+                title = "title",
+                description = "this is another treasure",
                 steps = listOf(
                         Step(
                                 UUID.randomUUID(),
+                                "Step near lake",
                                 LockedFeature("xp", "x"),
                                 Position(-50.000, 50.000),
                                 "tip nex"
@@ -47,10 +47,10 @@ class TreasureHuntController(private val treasureHuntService: TreasureHuntServic
                 startDate = Instant.now(),
                 endDate = Instant.now().plusMillis(10000),
                 maxWinners = 10,
-                password = LockedFeature(password = "jucap",tip="juca"),
+                lockedFeature = LockedFeature(password = "jucap",tip="juca"),
                 userCreateId = UUID.randomUUID(),
                 tipToFirstStep = "vai juca",
-                amountOfPoints = null,
+                amountOfPoints = BigDecimal(10),
                 especificRewards = listOf(ConfigReward(position = 1,  idsRewards=listOf(UUID.randomUUID())))
         )
 

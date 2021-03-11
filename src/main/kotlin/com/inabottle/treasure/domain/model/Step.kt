@@ -5,7 +5,8 @@ import java.util.*
 
 data class Step(
         val id: UUID?,
-        val password: LockedFeature?,
+        val title: String,
+        val lockedFeature: LockedFeature?,
         val position: Position,
         val tipToNextStep : String
 ){
